@@ -1,29 +1,14 @@
 {
   "users": [
     {
-      "email": "aria m",
-      "address": "null",
+      "name": "Tom",
+      "email": "tom@aol.com",
       "id": 1
     },
     {
-      "email": "Tom",
-      "password": "pass",
+      "name": "PC",
+      "email": "cat@aol.com",
       "id": 2
-    },
-    {
-      "email": "fake email",
-      "name": "fake name",
-      "id": 3
-    },
-    {
-      "email": "peter",
-      "name": "pan",
-      "id": 4
-    },
-    {
-      "email": "Dori.com",
-      "name": "Dori",
-      "id": 5
     }
   ]
 }

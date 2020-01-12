@@ -61,7 +61,7 @@ function validateBody(keys) {
     };
 }
 // Get all users
-router.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.get('/users', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var users;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -78,9 +78,34 @@ router.get('/', function (req, res) { return __awaiter(void 0, void 0, void 0, f
     });
 }); });
 // Get single user
-// TODO:
+router.get('/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, users;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                userId = req.params.id;
+                if (!userId) return [3 /*break*/, 2];
+                return [4 /*yield*/, axios_1.default
+                        .get(dbUrl + "/" + userId)
+                        .then(function (res) {
+                        return res.data;
+                    })
+                        .catch(function (err) {
+                        console.error(err);
+                        res.status(404).send("User with ID " + userId + " not found");
+                    })];
+            case 1:
+                users = _a.sent();
+                if (users) {
+                    res.send(users);
+                }
+                _a.label = 2;
+            case 2: return [2 /*return*/];
+        }
+    });
+}); });
 // Create a user
-router.post('/', validateBody(['name', 'email']), function (req, res, next) {
+router.post('/users', validateBody(['name', 'email']), function (req, res, next) {
     var user = req.body;
     axios_1.default
         .post(dbUrl, user)
@@ -93,21 +118,21 @@ router.post('/', validateBody(['name', 'email']), function (req, res, next) {
     });
 });
 // Update a user
-router.put('/', validateBody(['id', 'name', 'email']), function (req, res) {
+router.put('/users', validateBody(['id', 'name', 'email']), function (req, res) {
     var updatedUser = req.body;
     axios_1.default
         .put(dbUrl + "/" + updatedUser.id, updatedUser)
         .then(function () {
-        res.send("Updated user " + updatedUser.id);
+        res.send("Updated user with ID " + updatedUser.id);
     })
         .catch(function (err) {
         console.error(err);
-        res.send(err.message);
+        res.send("Failed to update user with ID " + updatedUser.id);
     });
 });
 // Delete a user
-router.delete('/', validateBody(['id']), function (req, res) {
-    var userId = req.body.id;
+router.delete('/users/:id', function (req, res) {
+    var userId = req.params.id;
     axios_1.default
         .delete(dbUrl + "/" + userId)
         .then(function () {
@@ -115,7 +140,7 @@ router.delete('/', validateBody(['id']), function (req, res) {
     })
         .catch(function (err) {
         console.error(err);
-        res.send(err.message);
+        res.send("Could not delete user with ID " + userId);
     });
 });
 exports.default = router;

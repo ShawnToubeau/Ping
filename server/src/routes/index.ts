@@ -1,5 +1,8 @@
-import user from './users';
+import express, { Request, Response } from 'express';
+const router = express.Router();
 
-export default {
-  user
-};
+router.get('/', (req: Request, res: Response) => {
+  res.send('Welcome');
+});
+
+export default router;

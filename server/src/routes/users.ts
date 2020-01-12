@@ -29,7 +29,7 @@ function validateBody(keys: string[]) {
 }
 
 // Get all users
-router.get('/', async (req: Request, res: Response) => {
+router.get('/users', async (req: Request, res: Response) => {
   const users = await axios.get(dbUrl).then((res: AxiosResponse) => {
     return res.data;
   });
@@ -40,11 +40,29 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 // Get single user
-// TODO:
+router.get('/users/:id', async (req: Request, res: Response) => {
+  const userId = req.params.id;
+
+  if (userId) {
+    const users = await axios
+      .get(`${dbUrl}/${userId}`)
+      .then((res: AxiosResponse) => {
+        return res.data;
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(404).send(`User with ID ${userId} not found`);
+      });
+
+    if (users) {
+      res.send(users);
+    }
+  }
+});
 
 // Create a user
 router.post(
-  '/',
+  '/users',
   validateBody(['name', 'email']),
   (req: Request, res: Response, next: NextFunction) => {
     const user: User = req.body;
@@ -63,7 +81,7 @@ router.post(
 
 // Update a user
 router.put(
-  '/',
+  '/users',
   validateBody(['id', 'name', 'email']),
   (req: Request, res: Response) => {
     const updatedUser = req.body;
@@ -71,18 +89,18 @@ router.put(
     axios
       .put(`${dbUrl}/${updatedUser.id}`, updatedUser)
       .then(() => {
-        res.send(`Updated user ${updatedUser.id}`);
+        res.send(`Updated user with ID ${updatedUser.id}`);
       })
       .catch(err => {
         console.error(err);
-        res.send(err.message);
+        res.send(`Failed to update user with ID ${updatedUser.id}`);
       });
   }
 );
 
 // Delete a user
-router.delete('/', validateBody(['id']), (req: Request, res: Response) => {
-  const userId = req.body.id;
+router.delete('/users/:id', (req: Request, res: Response) => {
+  const userId = req.params.id;
 
   axios
     .delete(`${dbUrl}/${userId}`)
@@ -91,7 +109,7 @@ router.delete('/', validateBody(['id']), (req: Request, res: Response) => {
     })
     .catch(err => {
       console.error(err);
-      res.send(err.message);
+      res.send(`Could not delete user with ID ${userId}`);
     });
 });
 
