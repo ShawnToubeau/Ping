@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import axios, { AxiosResponse } from 'axios';
-
 import { check, validationResult, ValidationChain } from 'express-validator';
+import axios, { AxiosResponse } from 'axios';
+import { Methods, UserFields } from '../enums';
 
 const dbUrl = 'http://localhost:3000/users';
 
@@ -9,11 +9,11 @@ const dbUrl = 'http://localhost:3000/users';
 // TODO: create enum for method names
 export const validate = (method: string): ValidationChain[] => {
   switch (method) {
-    case 'addUser':
-    case 'updateUser': {
+    case Methods.addUser:
+    case Methods.updateUser: {
       return [
-        check('name', "'name' doesn't exist").exists(),
-        check('email', 'Invalid email').isEmail()
+        check(UserFields.name, 'Missing param').exists(),
+        check(UserFields.email, 'Invalid email').isEmail()
       ];
     }
   }

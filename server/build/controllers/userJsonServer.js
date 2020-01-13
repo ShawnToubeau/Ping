@@ -3,18 +3,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var axios_1 = __importDefault(require("axios"));
 var express_validator_1 = require("express-validator");
+var axios_1 = __importDefault(require("axios"));
+var enums_1 = require("../enums");
 var dbUrl = 'http://localhost:3000/users';
 // Validator
 // TODO: create enum for method names
 exports.validate = function (method) {
     switch (method) {
-        case 'addUser':
-        case 'updateUser': {
+        case enums_1.Methods.addUser:
+        case enums_1.Methods.updateUser: {
             return [
-                express_validator_1.check('name', "'name' doesn't exist").exists(),
-                express_validator_1.check('email', 'Invalid email').isEmail()
+                express_validator_1.check(enums_1.UserFields.name, 'Missing param').exists(),
+                express_validator_1.check(enums_1.UserFields.email, 'Invalid email').isEmail()
             ];
         }
     }

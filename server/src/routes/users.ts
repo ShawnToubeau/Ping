@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as jsonServer from '../controllers/userJsonServer';
+import { Methods } from '../enums/Methods';
 
 const router = Router();
 
@@ -10,12 +11,12 @@ router.get('/users', jsonServer.getAllUsers);
 router.get('/users/:id', jsonServer.getUser);
 
 // POST: add user
-router.post('/users', jsonServer.validate('addUser'), jsonServer.addUser);
+router.post('/users', jsonServer.validate(Methods.addUser), jsonServer.addUser);
 
 // PUT: update user
 router.put(
   '/users/:id',
-  jsonServer.validate('updateUser'),
+  jsonServer.validate(Methods.updateUser),
   jsonServer.updateUser
 );
 

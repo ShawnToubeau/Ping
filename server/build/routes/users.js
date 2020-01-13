@@ -9,15 +9,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var jsonServer = __importStar(require("../controllers/userJsonServer"));
+var Methods_1 = require("../enums/Methods");
 var router = express_1.Router();
 // GET: all users
 router.get('/users', jsonServer.getAllUsers);
 // GET: single user
 router.get('/users/:id', jsonServer.getUser);
 // POST: add user
-router.post('/users', jsonServer.validate('addUser'), jsonServer.addUser);
+router.post('/users', jsonServer.validate(Methods_1.Methods.addUser), jsonServer.addUser);
 // PUT: update user
-router.put('/users/:id', jsonServer.validate('updateUser'), jsonServer.updateUser);
+router.put('/users/:id', jsonServer.validate(Methods_1.Methods.updateUser), jsonServer.updateUser);
 // DELETE: remove user
 router.delete('/users/:id', jsonServer.deleteUser);
 exports.default = router;
