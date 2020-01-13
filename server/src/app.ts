@@ -3,7 +3,7 @@ import expressLayouts from 'express-ejs-layouts';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 
-// Route imports
+// // Route imports
 import userRoute from './routes/users';
 import rootRoute from './routes/index';
 
@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressLayouts);
 
 // Routes
-app.use(userRoute);
+// app.use(userRoute);
 app.use(rootRoute);
 
 const PORT = process.env.PORT || 4000;

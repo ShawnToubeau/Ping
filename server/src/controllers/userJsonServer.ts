@@ -6,7 +6,6 @@ import { Methods, UserFields } from '../enums';
 const dbUrl = 'http://localhost:3000/users';
 
 // Validator
-// TODO: create enum for method names
 export const validate = (method: string): ValidationChain[] => {
   switch (method) {
     case Methods.addUser:
