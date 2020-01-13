@@ -20,6 +20,7 @@ mongoose_1.default
     .catch(function (err) { return console.error(err); });
 // Middleware
 app.use(body_parser_1.default.urlencoded({ extended: true }));
+// app.use(expressValidator());
 app.use(express_ejs_layouts_1.default);
 // Routes
 app.use(users_1.default);

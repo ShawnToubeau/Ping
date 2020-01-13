@@ -1,4 +1,5 @@
 import express from 'express';
+import expressValidator from 'express-validator';
 import expressLayouts from 'express-ejs-layouts';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -20,6 +21,7 @@ mongoose
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(expressValidator());
 app.use(expressLayouts);
 
 // Routes

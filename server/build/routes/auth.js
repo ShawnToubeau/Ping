@@ -1,42 +1,37 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var express_1 = require("express");
-var bcryptjs_1 = __importDefault(require("bcryptjs"));
-var Users_1 = __importDefault(require("../models/Users"));
-var router = express_1.Router();
-// Login
-router.get('/login', function (req, res) {
-    res.send('Login');
-});
-// Register
-router.get('/register', function (req, res) {
-    res.send('Register');
-});
-// Register user
-router.post('/register', function (req, res) {
-    var _a = req.body, name = _a.name, email = _a.email, password = _a.password;
-    //TODO:(Shawn) add field validation
-    var newUser = new Users_1.default({
-        name: name,
-        email: email,
-        password: password
-    });
-    // Hash password
-    bcryptjs_1.default.genSalt(10, function (err, salt) {
-        return bcryptjs_1.default.hash(newUser.password, salt, function (err, hash) {
-            if (err)
-                throw err;
-            newUser.password = hash;
-            newUser
-                .save()
-                .then(function (user) {
-                res.redirect('/login');
-            })
-                .catch(function (err) { return console.error(err); });
-        });
-    });
-});
-exports.default = router;
+// import { Router, Request, Response } from 'express';
+// import bcrypt from 'bcryptjs';
+// import User from '../models/Users';
+// const router = Router();
+// // Login
+// router.get('/login', (req: Request, res: Response) => {
+//   res.send('Login');
+// });
+// // Register
+// router.get('/register', (req: Request, res: Response) => {
+//   res.send('Register');
+// });
+// // Register user
+// router.post('/register', (req: Request, res: Response) => {
+//   const { name, email, password } = req.body;
+//   //TODO:(Shawn) add field validation
+//   const newUser = new User({
+//     name,
+//     email,
+//     password
+//   });
+//   // Hash password
+//   bcrypt.genSalt(10, (err, salt) =>
+//     bcrypt.hash(newUser.password, salt, (err, hash) => {
+//       if (err) throw err;
+//       newUser.password = hash;
+//       newUser
+//         .save()
+//         .then(user => {
+//           res.redirect('/login');
+//         })
+//         .catch(err => console.error(err));
+//     })
+//   );
+// });
+// export default router;
