@@ -83,6 +83,7 @@ export const addUser = (req: Request, res: Response) => {
         .save()
         .then(user => {
           // TODO: Redirect to login page
+          // req.flash('success_msg', 'You are now registered and can log in');
           // res.redirect('/login');
           res.send('Added user');
         })
