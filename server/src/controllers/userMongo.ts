@@ -2,15 +2,30 @@ import { Request, Response } from 'express';
 import { check, validationResult, ValidationChain } from 'express-validator';
 import User from '../models/Users';
 import { Methods, UserFields } from '../enums';
+import bcrypt from 'bcryptjs';
 
 // Validator
 export const validate = (method: string): ValidationChain[] => {
   switch (method) {
-    case Methods.addUser:
+    case Methods.addUser: {
+      return [
+        check(UserFields.name, 'Missing param').exists(),
+        check(UserFields.email, 'Invalid email').isEmail(),
+        check(UserFields.password, 'Missing password').exists(),
+        check(UserFields.email, 'Email is already in use').custom(value => {
+          return User.findOne({ email: value }).then(user => {
+            if (user) {
+              return Promise.reject();
+            }
+          });
+        })
+      ];
+    }
     case Methods.updateUser: {
       return [
         check(UserFields.name, 'Missing param').exists(),
-        check(UserFields.email, 'Invalid email').isEmail()
+        check(UserFields.email, 'Invalid email').isEmail(),
+        check(UserFields.password, 'Missing password').exists()
       ];
     }
   }
@@ -48,15 +63,32 @@ export const addUser = (req: Request, res: Response) => {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  const user = new User(req.body);
+  const { name, email, password } = req.body;
 
-  user.save((err: any) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(user);
-    }
+  const user = new User({
+    name,
+    email,
+    password
   });
+
+  // Hash password
+  bcrypt.genSalt(10, (err, salt) =>
+    bcrypt.hash(user.password, salt, (err, hash) => {
+      if (err) throw err;
+
+      // Set password to hashed
+      user.password = hash;
+      // Save user
+      user
+        .save()
+        .then(user => {
+          // TODO: Redirect to login page
+          // res.redirect('/login');
+          res.send('Added user');
+        })
+        .catch(err => res.send(err));
+    })
+  );
 };
 
 // DELETE user

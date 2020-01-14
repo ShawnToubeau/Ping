@@ -2,6 +2,7 @@ import express from 'express';
 import expressLayouts from 'express-ejs-layouts';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+// TODO: implement flash + express session
 
 // // Route imports
 import userRoute from './routes/users';
@@ -23,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressLayouts);
 
 // Routes
-// app.use(userRoute);
+app.use(userRoute);
 app.use(rootRoute);
 
 const PORT = process.env.PORT || 4000;
