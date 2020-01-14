@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import flash from 'connect-flash';
 import session from 'express-session';
 import passport from 'passport';
+require('dotenv').config();
 
 // // Route imports
 import userRoute from './routes/users';
@@ -16,13 +17,17 @@ import { passportConfig } from './config/passport';
 passportConfig(passport);
 
 // DB Config
-import db from './config/keys';
+const MongoURI = process.env.MONGO_URI;
 
 // Connect to Mongo
-mongoose
-  .connect(db.MongoURI, { useNewUrlParser: true })
-  .then(() => console.log('MongoDB connected...'))
-  .catch((err: Error) => console.error(err));
+if (MongoURI) {
+  mongoose
+    .connect(MongoURI, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB connected...'))
+    .catch((err: Error) => console.error(err));
+} else {
+  console.error('ERROR: Please provide a MongoDB URI');
+}
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
