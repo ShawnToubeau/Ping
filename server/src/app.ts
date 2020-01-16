@@ -16,10 +16,9 @@ const app = express();
 import { passportConfig } from './config/passport';
 passportConfig(passport);
 
-// DB Config
+// Connect to Mongo
 const MongoURI = process.env.MONGO_URI;
 
-// Connect to Mongo
 if (MongoURI) {
   mongoose
     .connect(MongoURI, { useNewUrlParser: true })
@@ -49,6 +48,7 @@ app.use(passport.session());
 app.use((req: Request, res: Response, next: NextFunction): void => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
   next();
 });
 
