@@ -1,5 +1,4 @@
 import { Strategy as LocalStrategy, IVerifyOptions } from 'passport-local';
-import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import User, { IUser } from '../models/Users';
 

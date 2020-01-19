@@ -2,6 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
+import axios, { AxiosResponse } from 'axios';
 
 interface LoginValues {
   email: string;
@@ -16,14 +17,10 @@ const LoginSchema = Yup.object().shape({
     .required('Emails is required'),
   password: Yup.string().required('Password is required')
 });
-export class Login extends React.Component<Props, any> {
-  constructor(props: Props) {
-    super(props);
-  }
-
+export class Login extends React.Component<Props> {
   render() {
+    // TODO: unable to read values on state, might be TS bug
     // const { msg } = this.props.location.state || '';
-
     // console.log(msg);
 
     return (
@@ -38,10 +35,20 @@ export class Login extends React.Component<Props, any> {
             values: LoginValues,
             { setSubmitting }: FormikHelpers<LoginValues>
           ) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
-              setSubmitting(false);
-            }, 500);
+            const dbUrl = 'http://localhost:4000/login';
+
+            axios
+              .post(dbUrl, values)
+              .then((res: AxiosResponse) => {
+                setSubmitting(false);
+                console.log(res);
+              })
+              .catch(err => {
+                setSubmitting(false);
+                console.log(err);
+              });
+
+            console.log(values);
           }}
           render={({ errors, isSubmitting }) => (
             <Form>

@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import flash from 'connect-flash';
@@ -8,6 +9,7 @@ require('dotenv').config();
 
 // // Route imports
 import userRoute from './routes/users';
+import loginRoute from './routes/auth';
 import rootRoute from './routes/index';
 
 const app = express();
@@ -30,6 +32,10 @@ if (MongoURI) {
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
+// CORS
+app.use(cors());
 
 // Express session
 app.use(
@@ -44,6 +50,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Connect flash
+app.use(flash());
+
 // Global vars
 app.use((req: Request, res: Response, next: NextFunction): void => {
   res.locals.success_msg = req.flash('success_msg');
@@ -52,11 +61,9 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   next();
 });
 
-// Connect flash
-app.use(flash());
-
 // Routes
 app.use(userRoute);
+app.use(loginRoute);
 app.use(rootRoute);
 
 const PORT = process.env.PORT || 4000;

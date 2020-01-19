@@ -19,7 +19,7 @@ const RegisterSchema = Yup.object().shape({
 });
 
 export class Register extends React.Component {
-  state = { toLogin: true };
+  state = { toLogin: false };
 
   render() {
     if (this.state.toLogin) {

@@ -9,7 +9,7 @@ export const validate = (method: string): ValidationChain[] => {
   switch (method) {
     case Methods.addUser: {
       return [
-        check(UserFields.name, 'Missing param').exists(),
+        check(UserFields.name, 'Missing name').exists(),
         check(UserFields.email, 'Invalid email').isEmail(),
         check(UserFields.password, 'Missing password').exists(),
         check(UserFields.email, 'Email is already in use').custom(value => {
@@ -82,9 +82,6 @@ export const addUser = (req: Request, res: Response) => {
       user
         .save()
         .then(user => {
-          // TODO: Redirect to login page
-          // req.flash('success_msg', 'You are now registered and can log in');
-          // res.redirect('/login');
           res.send('Added user');
         })
         .catch(err => res.send(err));
