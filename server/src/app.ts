@@ -5,18 +5,14 @@ import mongoose from 'mongoose';
 import flash from 'connect-flash';
 import session from 'express-session';
 import passport from 'passport';
+import { passportConfig } from './config/passport';
 require('dotenv').config();
 
 // // Route imports
 import userRoute from './routes/users';
-import loginRoute from './routes/auth';
 import rootRoute from './routes/index';
 
 const app = express();
-
-// Passport config
-import { passportConfig } from './config/passport';
-passportConfig(passport);
 
 // Connect to Mongo
 const MongoURI = process.env.MONGO_URI;
@@ -38,9 +34,11 @@ app.use(express.json());
 app.use(cors());
 
 // Express session
+const secret = process.env.SECRET || 'secret';
+
 app.use(
   session({
-    secret: 'secret',
+    secret: secret, //
     resave: true,
     saveUninitialized: true
   })
@@ -48,7 +46,8 @@ app.use(
 
 // Passport middleware
 app.use(passport.initialize());
-app.use(passport.session());
+passportConfig(passport);
+// app.use(passport.session());
 
 // Connect flash
 app.use(flash());
@@ -63,7 +62,6 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 
 // Routes
 app.use(userRoute);
-app.use(loginRoute);
 app.use(rootRoute);
 
 const PORT = process.env.PORT || 4000;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import axios, { AxiosResponse } from 'axios';
@@ -18,10 +18,23 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required('Password is required')
 });
 export class Login extends React.Component<Props> {
+  state = { loggedIn: false };
+
   render() {
     // TODO: unable to read values on state, might be TS bug
     // const { msg } = this.props.location.state || '';
     // console.log(msg);
+
+    if (this.state.loggedIn) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/dashboard',
+            state: { msg: 'Account created' }
+          }}
+        />
+      );
+    }
 
     return (
       <div>
@@ -41,14 +54,13 @@ export class Login extends React.Component<Props> {
               .post(dbUrl, values)
               .then((res: AxiosResponse) => {
                 setSubmitting(false);
-                console.log(res);
+                this.setState({ loggedIn: true });
               })
               .catch(err => {
                 setSubmitting(false);
+                // TODO: add alert
                 console.log(err);
               });
-
-            console.log(values);
           }}
           render={({ errors, isSubmitting }) => (
             <Form>

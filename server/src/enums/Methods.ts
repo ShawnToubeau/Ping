@@ -1,4 +1,5 @@
 export enum Methods {
   addUser = 'addUser',
-  updateUser = 'updateUser'
+  updateUser = 'updateUser',
+  loginUser = 'loginUser'
 }

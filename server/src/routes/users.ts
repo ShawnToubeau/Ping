@@ -28,4 +28,11 @@ router.put(
 // DELETE: remove user
 router.delete('/users/:id', userController.deleteUser);
 
+// POST Login
+router.post(
+  '/login',
+  userController.validate(Methods.loginUser),
+  userController.loginUser
+);
+
 export default router;

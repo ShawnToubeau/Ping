@@ -3,6 +3,8 @@ import { check, validationResult, ValidationChain } from 'express-validator';
 import User from '../models/Users';
 import { Methods, UserFields } from '../enums';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+require('dotenv').config();
 
 // Validator
 export const validate = (method: string): ValidationChain[] => {
@@ -24,6 +26,12 @@ export const validate = (method: string): ValidationChain[] => {
     case Methods.updateUser: {
       return [
         check(UserFields.name, 'Missing param').exists(),
+        check(UserFields.email, 'Invalid email').isEmail(),
+        check(UserFields.password, 'Missing password').exists()
+      ];
+    }
+    case Methods.loginUser: {
+      return [
         check(UserFields.email, 'Invalid email').isEmail(),
         check(UserFields.password, 'Missing password').exists()
       ];
@@ -114,5 +122,46 @@ export const updateUser = (req: Request, res: Response) => {
     } else {
       res.send('Successfully updated user');
     }
+  });
+};
+
+// POST login
+export const loginUser = (req: Request, res: Response) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  const { email, password } = req.body;
+
+  User.findOne({ email }).then(user => {
+    if (!user) {
+      return res.status(404).json({ userNotFound: 'The user is not found' });
+    }
+
+    // Match password
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (err) throw err;
+
+      if (isMatch) {
+        const payload = {
+          id: user.id,
+          name: user.name
+        };
+
+        const secretOrKey = process.env.SECRET || 'secret';
+        jwt.sign(
+          payload,
+          secretOrKey,
+          { expiresIn: 31556926 },
+          (err, token) => {
+            res.json({ success: true, token: `Bearer ${token}` });
+          }
+        );
+      } else {
+        return res.status(404).json({ wrongPassword: 'Password is incorrect' });
+      }
+    });
   });
 };
