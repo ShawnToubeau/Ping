@@ -46,10 +46,8 @@ export class Register extends React.Component {
             values: RegisterValues,
             { setSubmitting }: FormikHelpers<RegisterValues>
           ) => {
-            const dbUrl = 'http://localhost:4000/users';
-
             axios
-              .post(dbUrl, values)
+              .post('/users', values)
               .then((res: AxiosResponse) => {
                 setSubmitting(false);
                 this.setState({ toLogin: true });

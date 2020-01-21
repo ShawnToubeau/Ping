@@ -48,13 +48,17 @@ export class Login extends React.Component<Props> {
             values: LoginValues,
             { setSubmitting }: FormikHelpers<LoginValues>
           ) => {
-            const dbUrl = 'http://localhost:4000/login';
-
             axios
-              .post(dbUrl, values)
+              .post('/login', values)
               .then((res: AxiosResponse) => {
                 setSubmitting(false);
-                this.setState({ loggedIn: true });
+                // this.setState({ loggedIn: true });
+
+                // TODO:
+                // Save jwt to local storage
+                // set token to auth header
+                // decode to get user data
+                // set user
               })
               .catch(err => {
                 setSubmitting(false);
