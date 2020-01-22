@@ -1,13 +1,21 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import axios, { AxiosResponse } from 'axios';
+import { registerUser } from '../actions/authActions';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import User from '../models/User';
+import { RootState } from 'typesafe-actions';
 
-interface RegisterValues {
-  name: string;
-  email: string;
-  password: string;
+const mapStateToProps = (state: RootState) => ({
+  auth: state.auth,
+  errors: state.errors,
+  history: 
+});
+
+const dispatchProps = {
+  registerUser: registerUser,
 }
 
 const RegisterSchema = Yup.object().shape({
@@ -18,20 +26,40 @@ const RegisterSchema = Yup.object().shape({
   password: Yup.string().required('Password is required')
 });
 
-export class Register extends React.Component {
-  state = { toLogin: false };
+// interface Props {
+//   registerUser(userData: User, history: any): any;
+//   errors: {};
+//   history: any;
+// }
+type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+
+type State = {
+  auth?: string;
+  errors?: {};
+}
+
+class Register extends React.Component<Props, State> {
+  static propTypes: any;
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      auth: '',
+      errors: {}
+    };
+  }
+
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+    return true;
+  }
 
   render() {
-    if (this.state.toLogin) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/login',
-            state: { msg: 'Account created' }
-          }}
-        />
-      );
-    }
+    const { errors } = this.state;
+
+    console.log(errors);
 
     return (
       <div>
@@ -43,20 +71,10 @@ export class Register extends React.Component {
           }}
           validationSchema={RegisterSchema}
           onSubmit={(
-            values: RegisterValues,
-            { setSubmitting }: FormikHelpers<RegisterValues>
+            user: User,
+            { setSubmitting }: FormikHelpers<User>
           ) => {
-            axios
-              .post('/users', values)
-              .then((res: AxiosResponse) => {
-                setSubmitting(false);
-                this.setState({ toLogin: true });
-              })
-              .catch(err => {
-                setSubmitting(false);
-                //TODO: Show error to user
-                console.log(err.response.data.errors);
-              });
+            this.props.registerUser(user, this.props.history);
           }}
           render={({ errors, isSubmitting }) => (
             <Form style={{ display: 'flex' }}>
@@ -99,3 +117,14 @@ export class Register extends React.Component {
     );
   }
 }
+
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
+};
+
+
+
+// TODO: wrap component withRouter
+export default connect(mapStateToProps, dispatchProps)(Register);
