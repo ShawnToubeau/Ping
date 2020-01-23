@@ -6,7 +6,9 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 
 // Components
-import { Login, Register, Dashboard } from './views';
+import { Dashboard } from './views';
+import Register from './views/Register';
+import Login from './views/Login';
 
 export const App: React.FC = () => {
   return (

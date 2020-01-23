@@ -1,6 +1,6 @@
 import { SET_CURRENT_USER, USER_LOADING } from '../actions/types';
 
-const isEmpty = require('is-empty');
+// const isEmpty = require('is-empty');
 
 const initialState = {
   isAuthenticated: false,
@@ -12,9 +12,10 @@ const initialState = {
 export default (state = initialState, action: any) => {
   switch (action.type) {
     case SET_CURRENT_USER:
+      console.log(action.payload);
       return {
         ...state,
-        isAuthenticated: !isEmpty(action.payload),
+        isAuthenticated: Object.keys(action.payload).length > 0,
         user: action.payload
       };
     case USER_LOADING:

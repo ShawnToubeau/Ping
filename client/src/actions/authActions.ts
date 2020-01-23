@@ -7,15 +7,14 @@ import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from './types';
 
 // Register User
 // TODO: add annotation to dispatch
-export const registerUser = (userData: User, history: any) => (
-  dispatch: any
-) => {
+export const registerUser = (userData: User) => (dispatch: any) => {
   axios
     .post('/users', userData)
     .then((res: AxiosResponse) => {
-      history.push('/login');
+      // TODO: redirect to Login
     })
     .catch(err => {
+      console.log(err);
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -25,6 +24,7 @@ export const registerUser = (userData: User, history: any) => (
 
 // Login User
 export const loginUser = (userData: User) => (dispatch: any) => {
+  console.log('login');
   axios
     .post('/login', userData)
     .then((res: AxiosResponse) => {

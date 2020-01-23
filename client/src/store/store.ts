@@ -1,7 +1,9 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { RootAction, RootState } from 'typesafe-actions';
 import rootReducer from '../reducers/rootReducer';
+import thunk from 'redux-thunk';
 
 export const epicMiddleware = createEpicMiddleware<
   RootAction,
@@ -10,17 +12,19 @@ export const epicMiddleware = createEpicMiddleware<
 >();
 
 // Configure middleware
-const middleware = [epicMiddleware]; // TODO: should I include thunk?
+let middleware = applyMiddleware(epicMiddleware, thunk);
 
 // Rehydrate state
 const initialsState = {};
 
+if (process.env.NODE_ENV === 'development') {
+  middleware = composeWithDevTools({ trace: true, traceLimit: 25 })(middleware);
+} else {
+  middleware = compose(middleware);
+}
+
 // Create store
-const store = createStore(
-  rootReducer,
-  initialsState,
-  applyMiddleware(...middleware)
-);
+const store = createStore(rootReducer, initialsState, middleware);
 
 // TODO: Implement application epics
 // epicMiddleware.run(rootEpic);

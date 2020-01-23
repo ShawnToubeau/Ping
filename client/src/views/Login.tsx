@@ -1,15 +1,16 @@
 import React from 'react';
-import { RouteComponentProps, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import axios, { AxiosResponse } from 'axios';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-interface LoginValues {
-  email: string;
-  password: string;
-}
-
-interface Props extends RouteComponentProps {}
+// Model
+import User from '../models/User';
+// Actions
+import { loginUser } from '../actions/authActions';
+// Store
+import { RootState } from 'typesafe-actions';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -17,38 +18,49 @@ const LoginSchema = Yup.object().shape({
     .required('Emails is required'),
   password: Yup.string().required('Password is required')
 });
-export class Login extends React.Component<Props> {
-  state = { loggedIn: false };
+
+interface Props {
+  loginUser: (userData: User) => void;
+  errors: RootState;
+  auth: RootState;
+}
+class Login extends React.Component<Props> {
+  // shouldComponentUpdate(nextProps: Props) {
+  //   if (nextProps.errors) {
+  //     this.setState({ errors: nextProps.errors });
+  //   }
+  //   return true;
+  // }
 
   render() {
-    // TODO: unable to read values on state, might be TS bug
-    // const { msg } = this.props.location.state || '';
-    // console.log(msg);
+    const { errors, auth } = this.props;
+    console.log(this.props);
+    console.log(auth);
+    // console.log(errors);
 
-    if (this.state.loggedIn) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/dashboard',
-            state: { msg: 'Account created' }
-          }}
-        />
-      );
-    }
+    // if (auth.auth.isAuthenticated) {
+    //   return (
+    //     <Redirect
+    //       to={{
+    //         pathname: '/dashboard',
+    //         state: { msg: 'Account created' }
+    //       }}
+    //     />
+    //   );
+    // }
 
     return (
       <div>
         <Formik
           initialValues={{
             email: '',
-            password: ''
+            password: '',
+            name: ''
           }}
           validationSchema={LoginSchema}
-          onSubmit={(
-            values: LoginValues,
-            { setSubmitting }: FormikHelpers<LoginValues>
-          ) => {
-            // Login action
+          onSubmit={(user: User, { setSubmitting }: FormikHelpers<User>) => {
+            console.log('submit');
+            this.props.loginUser(user);
           }}
           render={({ errors, isSubmitting }) => (
             <Form>
@@ -82,3 +94,19 @@ export class Login extends React.Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: RootState) => ({
+  errors: state.errors,
+  auth: state.auth
+});
+
+const mapDispatchToProps = (dispatch: any) => {
+  return bindActionCreators(
+    {
+      loginUser
+    },
+    dispatch
+  );
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
