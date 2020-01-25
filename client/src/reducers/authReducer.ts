@@ -1,8 +1,13 @@
 import { SET_CURRENT_USER, USER_LOADING } from '../actions/types';
+import User from '../models/User';
 
-// const isEmpty = require('is-empty');
+export interface Auth {
+  isAuthenticated: boolean;
+  user: User;
+  loading: boolean;
+}
 
-const initialState = {
+const initialState: Auth = {
   isAuthenticated: false,
   user: {},
   loading: false

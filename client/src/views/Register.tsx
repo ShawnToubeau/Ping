@@ -49,7 +49,7 @@ class Register extends React.Component<Props> {
             password: ''
           }}
           validationSchema={RegisterSchema}
-          onSubmit={(user: User, { setSubmitting }: FormikHelpers<User>) => {
+          onSubmit={(user: User, { setSubmitting }: FormikHelpers<any>) => {
             this.props.registerUser(user);
           }}
           render={({ errors, isSubmitting }) => (

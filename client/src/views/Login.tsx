@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+// Interfaces
+import { Auth } from '../reducers/authReducer';
 // Model
 import User from '../models/User';
 // Actions
@@ -22,7 +24,7 @@ const LoginSchema = Yup.object().shape({
 interface Props {
   loginUser: (userData: User) => void;
   errors: RootState;
-  auth: RootState;
+  auth: Auth;
 }
 class Login extends React.Component<Props> {
   // shouldComponentUpdate(nextProps: Props) {
@@ -58,7 +60,7 @@ class Login extends React.Component<Props> {
             name: ''
           }}
           validationSchema={LoginSchema}
-          onSubmit={(user: User, { setSubmitting }: FormikHelpers<User>) => {
+          onSubmit={(user: User, { setSubmitting }: FormikHelpers<any>) => {
             console.log('submit');
             this.props.loginUser(user);
           }}
