@@ -2,15 +2,16 @@ import React from 'react';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
 // Model
 import User from '../models/User';
 // Actions
-import { registerUser, loginUser } from '../actions/authActions';
+import { registerUser } from '../actions/authActions';
 // Store
 import { RootState } from 'typesafe-actions';
+import { Auth } from '../reducers/authReducer';
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
@@ -21,24 +22,24 @@ const RegisterSchema = Yup.object().shape({
 });
 
 interface Props {
-  loginUser: (userData: User) => void;
   registerUser: (userData: User) => void;
-  errors: RootState;
-  history: RouteComponentProps;
+  auth: Auth;
 }
 
 class Register extends React.Component<Props> {
-  shouldComponentUpdate(nextProps: Props) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
-    }
-    return true;
-  }
-
   render() {
-    const { errors } = this.props;
-    console.log(this.props);
-    console.log(this.props.loginUser);
+    const { auth } = this.props;
+
+    // Redirect if logged in
+    if (auth.isAuthenticated) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/dashboard'
+          }}
+        />
+      );
+    }
 
     return (
       <div>
@@ -51,6 +52,7 @@ class Register extends React.Component<Props> {
           validationSchema={RegisterSchema}
           onSubmit={(user: User, { setSubmitting }: FormikHelpers<any>) => {
             this.props.registerUser(user);
+            setSubmitting(false);
           }}
           render={({ errors, isSubmitting }) => (
             <Form style={{ display: 'flex' }}>
@@ -95,14 +97,13 @@ class Register extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  errors: state.errors
+  auth: state.auth
 });
 
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators(
     {
-      registerUser,
-      loginUser
+      registerUser
     },
     dispatch
   );

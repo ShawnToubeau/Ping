@@ -5,38 +5,24 @@ import { connect } from 'react-redux';
 // Interfaces
 import { Auth } from './reducers/authReducer';
 import { RootState } from 'typesafe-actions';
-// Actions
-import { logoutUser } from './actions/authActions';
 
 export interface Props extends RouteProps {
-  auth: Auth;
+  auth?: Auth;
 }
 
-export const ProtectedRoute: React.FC<Props> = (
-  { children, auth },
-  ...rest
-) => {
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        auth.isAuthenticated ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: location }
-            }}
-          />
-        )
-      }
-    />
-  );
-};
+class ProtectedRoute extends Route<Props> {
+  render() {
+    const { component, path, auth } = this.props;
+
+    if (auth && auth.isAuthenticated) {
+      return <Route path={path} component={component} />;
+    }
+
+    return <Redirect to={{ pathname: '/login' }} />;
+  }
+}
 
 const mapStateToProps = (state: RootState) => ({
-  errors: state.errors,
   auth: state.auth
 });
 

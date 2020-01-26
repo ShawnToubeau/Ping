@@ -27,29 +27,18 @@ interface Props {
   auth: Auth;
 }
 class Login extends React.Component<Props> {
-  // shouldComponentUpdate(nextProps: Props) {
-  //   if (nextProps.errors) {
-  //     this.setState({ errors: nextProps.errors });
-  //   }
-  //   return true;
-  // }
-
   render() {
-    const { errors, auth } = this.props;
-    console.log(this.props);
-    console.log(auth);
-    // console.log(errors);
+    const { auth } = this.props;
 
-    // if (auth.auth.isAuthenticated) {
-    //   return (
-    //     <Redirect
-    //       to={{
-    //         pathname: '/dashboard',
-    //         state: { msg: 'Account created' }
-    //       }}
-    //     />
-    //   );
-    // }
+    if (auth.isAuthenticated) {
+      return (
+        <Redirect
+          to={{
+            pathname: '/dashboard'
+          }}
+        />
+      );
+    }
 
     return (
       <div>
@@ -61,8 +50,8 @@ class Login extends React.Component<Props> {
           }}
           validationSchema={LoginSchema}
           onSubmit={(user: User, { setSubmitting }: FormikHelpers<any>) => {
-            console.log('submit');
             this.props.loginUser(user);
+            setSubmitting(false);
           }}
           render={({ errors, isSubmitting }) => (
             <Form>

@@ -24,7 +24,6 @@ export const registerUser = (userData: User) => (dispatch: any) => {
 
 // Login User
 export const loginUser = (userData: User) => (dispatch: any) => {
-  console.log('login');
   axios
     .post('/login', userData)
     .then((res: AxiosResponse) => {
