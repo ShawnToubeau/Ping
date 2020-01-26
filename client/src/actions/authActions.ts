@@ -1,13 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
-import setAuthToken from '../utils/setAuthToken';
 import jwt_decode from 'jwt-decode';
-import User from '../models/User';
-
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from './types';
+import { Dispatch, AnyAction } from 'redux';
+
+// Models
+import User from '../models/User';
+// Actions
+import setAuthToken from '../utils/setAuthToken';
 
 // Register User
-// TODO: add annotation to dispatch
-export const registerUser = (userData: User) => (dispatch: any) => {
+export const registerUser = (userData: User) => (dispatch: Dispatch): void => {
   axios
     .post('/users', userData)
     .then((res: AxiosResponse) => {
@@ -23,18 +25,16 @@ export const registerUser = (userData: User) => (dispatch: any) => {
 };
 
 // Login User
-export const loginUser = (userData: User) => (dispatch: any) => {
+export const loginUser = (userData: User) => (dispatch: Dispatch): void => {
   axios
     .post('/login', userData)
     .then((res: AxiosResponse) => {
       const { token } = res.data;
-      // Store token in local storage
       localStorage.setItem('jwtToken', token);
-      // Set token in Auth header
+      // Set Axios auth header
       setAuthToken(token);
-      // Decode token
       const decodedToken = jwt_decode(token);
-      // Set current user
+      // Set user
       dispatch(setCurrentUser(decodedToken));
     })
     .catch(err =>
@@ -46,7 +46,7 @@ export const loginUser = (userData: User) => (dispatch: any) => {
 };
 
 // Set User
-export const setCurrentUser = (decoded: unknown) => {
+export const setCurrentUser = (decoded: unknown): AnyAction => {
   return {
     type: SET_CURRENT_USER,
     payload: decoded
@@ -54,18 +54,18 @@ export const setCurrentUser = (decoded: unknown) => {
 };
 
 // Loading User
-export const setUserLoading = () => {
+export const setUserLoading = (): {} => {
   return {
     type: USER_LOADING
   };
 };
 
 // Logout User
-export const logoutUser = () => (dispatch: any) => {
-  // Remove token from local storage
+export const logoutUser = () => (dispatch: Dispatch): void => {
+  // Remove token from localstorage
   localStorage.removeItem('jwtToken');
-  // Remove Auth header
+  // Remove Axios auth header
   setAuthToken(null);
-  // Remove current user
+  // Remove user data
   dispatch(setCurrentUser({}));
 };

@@ -2,17 +2,18 @@ import React from 'react';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
-// Model
-import User from '../models/User';
 // Actions
 import { registerUser } from '../actions/authActions';
-// Store
-import { RootState } from 'typesafe-actions';
-import { Auth } from '../reducers/authReducer';
 
+// Interfaces
+import User from '../models/User';
+interface Props {
+  registerUser: (userData: User) => void;
+}
+
+// Form validation schema
 const RegisterSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   email: Yup.string()
@@ -21,26 +22,8 @@ const RegisterSchema = Yup.object().shape({
   password: Yup.string().required('Password is required')
 });
 
-interface Props {
-  registerUser: (userData: User) => void;
-  auth: Auth;
-}
-
 class Register extends React.Component<Props> {
   render() {
-    const { auth } = this.props;
-
-    // Redirect if logged in
-    if (auth.isAuthenticated) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/dashboard'
-          }}
-        />
-      );
-    }
-
     return (
       <div>
         <Formik
@@ -96,10 +79,6 @@ class Register extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootState) => ({
-  auth: state.auth
-});
-
 const mapDispatchToProps = (dispatch: any) => {
   return bindActionCreators(
     {
@@ -109,4 +88,4 @@ const mapDispatchToProps = (dispatch: any) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Register);
+export default connect(null, mapDispatchToProps)(Register);

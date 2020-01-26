@@ -3,10 +3,9 @@ import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 // Interfaces
-import { Auth } from './reducers/authReducer';
+import { Auth } from '../reducers/authReducer';
 import { RootState } from 'typesafe-actions';
-
-export interface Props extends RouteProps {
+interface Props extends RouteProps {
   auth?: Auth;
 }
 

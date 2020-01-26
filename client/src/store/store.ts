@@ -26,7 +26,4 @@ if (process.env.NODE_ENV === 'development') {
 // Create store
 const store = createStore(rootReducer, initialsState, middleware);
 
-// TODO: Implement application epics
-// epicMiddleware.run(rootEpic);
-
 export default store;

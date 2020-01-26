@@ -1,12 +1,9 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-// Interfaces
-import { Auth } from '../reducers/authReducer';
 // Model
 import User from '../models/User';
 // Actions
@@ -14,6 +11,12 @@ import { loginUser } from '../actions/authActions';
 // Store
 import { RootState } from 'typesafe-actions';
 
+interface Props {
+  loginUser: (userData: User) => void;
+  errors: RootState;
+}
+
+// Form validation schema
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
@@ -21,25 +24,8 @@ const LoginSchema = Yup.object().shape({
   password: Yup.string().required('Password is required')
 });
 
-interface Props {
-  loginUser: (userData: User) => void;
-  errors: RootState;
-  auth: Auth;
-}
 class Login extends React.Component<Props> {
   render() {
-    const { auth } = this.props;
-
-    if (auth.isAuthenticated) {
-      return (
-        <Redirect
-          to={{
-            pathname: '/dashboard'
-          }}
-        />
-      );
-    }
-
     return (
       <div>
         <Formik
@@ -87,8 +73,7 @@ class Login extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  errors: state.errors,
-  auth: state.auth
+  errors: state.errors
 });
 
 const mapDispatchToProps = (dispatch: any) => {

@@ -2,15 +2,12 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-// Interfaces
-import { Auth } from '../reducers/authReducer';
-// Model
-import User from '../models/User';
 // Actions
 import { logoutUser } from '../actions/authActions';
-// Store
+// Interfaces
 import { RootState } from 'typesafe-actions';
-
+import { Auth } from '../reducers/authReducer';
+import User from '../models/User';
 interface Props {
   logoutUser: () => void;
   errors: RootState;
