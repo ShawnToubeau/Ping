@@ -1,10 +1,17 @@
 import { Schema, model, Document } from 'mongoose';
 
+export interface Post {
+  body: string;
+  likes: number;
+  date?: Date;
+}
+
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
   date?: Date;
+  posts: Post[];
 }
 
 const userSchema = new Schema({
@@ -20,9 +27,12 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  date: {
+  dateCreated: {
     type: Date,
     default: Date.now
+  },
+  posts: {
+    type: Array
   }
 });
 

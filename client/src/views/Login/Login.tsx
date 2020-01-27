@@ -3,11 +3,12 @@ import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import './Login.scss';
 
 // Model
-import User from '../models/User';
+import User from '../../models/User';
 // Actions
-import { loginUser } from '../actions/authActions';
+import { loginUser } from '../../actions/authActions';
 // Store
 import { RootState } from 'typesafe-actions';
 
@@ -20,14 +21,15 @@ interface Props {
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
-    .required('Emails is required'),
+    .required('Email is required'),
   password: Yup.string().required('Password is required')
 });
 
 class Login extends React.Component<Props> {
   render() {
     return (
-      <div>
+      <div className="Login">
+        <h1>Login</h1>
         <Formik
           initialValues={{
             email: '',
@@ -41,32 +43,42 @@ class Login extends React.Component<Props> {
           }}
           render={({ errors, isSubmitting }) => (
             <Form>
-              <label htmlFor="email">Email</label>
-              <Field
-                id="email"
-                name="email"
-                placeholder="Enter email"
-                type="text"
-              />
-              {errors.email ? errors.email : null}
+              <div className="form-field">
+                <label htmlFor="email">Email</label>
+                <Field
+                  id="email"
+                  name="email"
+                  placeholder="Enter email"
+                  type="text"
+                />
+                <div className="error">
+                  {errors.email ? errors.email : null}
+                </div>
+              </div>
 
-              <label htmlFor="password">Password</label>
-              <Field
-                id="password"
-                name="password"
-                placeholder="Enter password"
-                type="password"
-              />
-              {errors.password ? errors.password : null}
+              <div className="form-field">
+                <label htmlFor="password">Password</label>
+                <Field
+                  id="password"
+                  name="password"
+                  placeholder="Enter password"
+                  type="password"
+                />
+                <div className="error">
+                  {errors.password ? errors.password : null}
+                </div>
+              </div>
 
               <button type="submit" disabled={isSubmitting}>
-                Submit
+                Login
               </button>
             </Form>
           )}
         />
-        <p>Need a account?</p>
-        <a href="/register">Register</a>
+        <div className="referrer">
+          <p>Need a account?</p>
+          <a href="/register">Register</a>
+        </div>
       </div>
     );
   }

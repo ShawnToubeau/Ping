@@ -1,9 +1,10 @@
 import React from 'react';
 import { Switch, BrowserRouter as Router } from 'react-router-dom';
 import { RootState } from 'typesafe-actions';
-import { connect, Provider } from 'react-redux';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import jwt_decode from 'jwt-decode';
+import './App.scss';
 
 // Store
 import store from './store/store';
@@ -16,8 +17,8 @@ import LoggedOutRoute from './components/LoggedOutRoute';
 
 // Components
 import Dashboard from './views/Dashboard';
-import Register from './views/Register';
-import Login from './views/Login';
+import Register from './views/Register/Register';
+import Login from './views/Login/Login';
 
 // Interfaces
 import { Auth } from './reducers/authReducer';
@@ -48,19 +49,17 @@ if (localStorage.jwtToken) {
 
 class App extends React.Component<Props> {
   render() {
-    const { auth, errors } = this.props;
-    console.log(auth);
+    const { errors } = this.props;
+    console.log(errors);
 
     return (
-      <Provider store={store}>
-        <Router>
-          <Switch>
-            <LoggedOutRoute path="/login" component={Login} />
-            <LoggedOutRoute path="/register" component={Register} />
-            <ProtectedRoute path="/dashboard" component={Dashboard} />
-          </Switch>
-        </Router>
-      </Provider>
+      <Router>
+        <Switch>
+          <LoggedOutRoute path="/login" component={Login} />
+          <LoggedOutRoute path="/register" component={Register} />
+          <ProtectedRoute path="/dashboard" component={Dashboard} />
+        </Switch>
+      </Router>
     );
   }
 }
