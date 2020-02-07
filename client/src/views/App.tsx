@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, BrowserRouter as Router } from 'react-router-dom';
+import { Switch, BrowserRouter as Router, Redirect } from 'react-router-dom';
 import { RootState } from 'typesafe-actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,21 +7,21 @@ import jwt_decode from 'jwt-decode';
 import './App.scss';
 
 // Store
-import store from './store/store';
+import store from '../store/store';
 // Actions
-import { setCurrentUser, logoutUser } from './actions/authActions';
-import setAuthToken from './utils/setAuthToken';
+import { setCurrentUser, logoutUser } from '../actions/authActions';
+import setAuthToken from '../utils/setAuthToken';
 // Components
-import ProtectedRoute from './components/ProtectedRoute';
-import LoggedOutRoute from './components/LoggedOutRoute';
+import ProtectedRoute from '../components/ProtectedRoute';
+import LoggedOutRoute from '../components/LoggedOutRoute';
 
 // Components
-import Dashboard from './views/Dashboard';
-import Register from './views/Register/Register';
-import Login from './views/Login/Login';
+import Dashboard from './Dashboard';
+import Register from './Register';
+import Login from './Login';
 
 // Interfaces
-import { Auth } from './reducers/authReducer';
+import { Auth } from '../reducers/authReducer';
 interface TokenDto {
   exp: number;
   iat: number;
@@ -55,6 +55,7 @@ class App extends React.Component<Props> {
     return (
       <Router>
         <Switch>
+          <Redirect exact path="/" to="/login" />
           <LoggedOutRoute path="/login" component={Login} />
           <LoggedOutRoute path="/register" component={Register} />
           <ProtectedRoute path="/dashboard" component={Dashboard} />

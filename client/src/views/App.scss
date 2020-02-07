@@ -69,3 +69,36 @@ form {
     margin: 0 auto 15px;
   }
 }
+
+// Specific Styles
+.Login,
+.Register {
+  background-color: white;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  width: fit-content;
+  margin: auto;
+  border-radius: 4px;
+
+  h1 {
+    margin-top: 10vh;
+    margin-bottom: 20px;
+    padding: 10px 10px 0 10px;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.334;
+    letter-spacing: 0em;
+  }
+
+  .referrer {
+    display: flex;
+    width: fit-content;
+    margin: auto;
+    padding-bottom: 10px;
+
+    a {
+      margin-left: 5px;
+      text-decoration: none;
+    }
+  }
+}

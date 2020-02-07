@@ -3,7 +3,6 @@ import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import './Register.scss';
 
 // Actions
 import { registerUser } from '../../actions/authActions';
@@ -20,7 +19,10 @@ const RegisterSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email')
     .required('Emails is required'),
-  password: Yup.string().required('Password is required')
+  password: Yup.string().required('Password is required'),
+  passwordConfirm: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Passwords do not match')
+    .required('Reenter your password')
 });
 
 class Register extends React.Component<Props> {
@@ -32,14 +34,15 @@ class Register extends React.Component<Props> {
           initialValues={{
             name: '',
             email: '',
-            password: ''
+            password: '',
+            passwordConfirm: ''
           }}
           validationSchema={RegisterSchema}
           onSubmit={(user: User, { setSubmitting }: FormikHelpers<any>) => {
             this.props.registerUser(user);
             setSubmitting(false);
           }}
-          render={({ errors, isSubmitting }) => (
+          render={({ errors, touched, isSubmitting }) => (
             <Form>
               <div className="form-field">
                 <label htmlFor="name">Name</label>
@@ -49,7 +52,9 @@ class Register extends React.Component<Props> {
                   placeholder="Enter name"
                   type="text"
                 />
-                <div className="error">{errors.name ? errors.name : null}</div>
+                <div className="error">
+                  {errors.name && touched.name ? errors.name : null}
+                </div>
               </div>
 
               <div className="form-field">
@@ -61,7 +66,7 @@ class Register extends React.Component<Props> {
                   type="text"
                 />
                 <div className="error">
-                  {errors.email ? errors.email : null}
+                  {errors.email && touched.email ? errors.email : null}
                 </div>
               </div>
 
@@ -74,7 +79,22 @@ class Register extends React.Component<Props> {
                   type="password"
                 />
                 <div className="error">
-                  {errors.password ? errors.password : null}
+                  {errors.password && touched.password ? errors.password : null}
+                </div>
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="password">Confirm Password</label>
+                <Field
+                  id="passwordConfirm"
+                  name="passwordConfirm"
+                  placeholder="Reenter password"
+                  type="password"
+                />
+                <div className="error">
+                  {errors.passwordConfirm && touched.passwordConfirm
+                    ? errors.passwordConfirm
+                    : null}
                 </div>
               </div>
 

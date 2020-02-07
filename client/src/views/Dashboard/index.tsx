@@ -3,11 +3,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Actions
-import { logoutUser } from '../actions/authActions';
+import { logoutUser } from '../../actions/authActions';
 // Interfaces
 import { RootState } from 'typesafe-actions';
-import { Auth } from '../reducers/authReducer';
-import User from '../models/User';
+import { Auth } from '../../reducers/authReducer';
+import User from '../../models/User';
 interface Props {
   logoutUser: () => void;
   errors: RootState;

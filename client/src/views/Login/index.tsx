@@ -3,7 +3,6 @@ import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import './Login.scss';
 
 // Model
 import User from '../../models/User';
@@ -33,15 +32,14 @@ class Login extends React.Component<Props> {
         <Formik
           initialValues={{
             email: '',
-            password: '',
-            name: ''
+            password: ''
           }}
           validationSchema={LoginSchema}
           onSubmit={(user: User, { setSubmitting }: FormikHelpers<any>) => {
             this.props.loginUser(user);
             setSubmitting(false);
           }}
-          render={({ errors, isSubmitting }) => (
+          render={({ errors, touched, isSubmitting }) => (
             <Form>
               <div className="form-field">
                 <label htmlFor="email">Email</label>
@@ -52,7 +50,7 @@ class Login extends React.Component<Props> {
                   type="text"
                 />
                 <div className="error">
-                  {errors.email ? errors.email : null}
+                  {errors.email && touched.email ? errors.email : null}
                 </div>
               </div>
 
@@ -65,7 +63,7 @@ class Login extends React.Component<Props> {
                   type="password"
                 />
                 <div className="error">
-                  {errors.password ? errors.password : null}
+                  {errors.password && touched.password ? errors.password : null}
                 </div>
               </div>
 
