@@ -1,7 +1,6 @@
 import { Router } from 'express';
-// import * as jsonServer from '../controllers/userJsonServer';
 import * as userController from '../controllers/userMongo';
-import { Methods } from '../enums/Methods';
+import { UserControllerMethods } from '../enums/UserControllerMethods';
 
 const router = Router();
 
@@ -14,14 +13,14 @@ router.get('/users/:id', userController.getUser);
 // POST: add user
 router.post(
   '/users',
-  userController.validate(Methods.addUser),
+  userController.validate(UserControllerMethods.addUser),
   userController.addUser
 );
 
 // PUT: update user
 router.put(
   '/users/:id',
-  userController.validate(Methods.updateUser),
+  userController.validate(UserControllerMethods.updateUser),
   userController.updateUser
 );
 
@@ -31,7 +30,7 @@ router.delete('/users/:id', userController.deleteUser);
 // POST Login
 router.post(
   '/login',
-  userController.validate(Methods.loginUser),
+  userController.validate(UserControllerMethods.loginUser),
   userController.loginUser
 );
 

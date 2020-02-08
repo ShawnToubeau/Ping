@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { check, validationResult, ValidationChain } from 'express-validator';
-import User from '../models/Users';
-import { Methods, UserFields } from '../enums';
+import User from '../models/User';
+import { UserControllerMethods, UserFields } from '../enums';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 require('dotenv').config();
@@ -9,7 +9,7 @@ require('dotenv').config();
 // Validator
 export const validate = (method: string): ValidationChain[] => {
   switch (method) {
-    case Methods.addUser: {
+    case UserControllerMethods.addUser: {
       return [
         check(UserFields.name, 'Missing name').exists(),
         check(UserFields.email, 'Invalid email').isEmail(),
@@ -23,14 +23,14 @@ export const validate = (method: string): ValidationChain[] => {
         })
       ];
     }
-    case Methods.updateUser: {
+    case UserControllerMethods.updateUser: {
       return [
         check(UserFields.name, 'Missing param').exists(),
         check(UserFields.email, 'Invalid email').isEmail(),
         check(UserFields.password, 'Missing password').exists()
       ];
     }
-    case Methods.loginUser: {
+    case UserControllerMethods.loginUser: {
       return [
         check(UserFields.email, 'Invalid email').isEmail(),
         check(UserFields.password, 'Missing password').exists()

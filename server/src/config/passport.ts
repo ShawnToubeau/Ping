@@ -1,6 +1,6 @@
 // import { Strategy as LocalStrategy, IVerifyOptions } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
-import User from '../models/Users';
+import User from '../models/User';
 require('dotenv').config();
 
 const opts = {
