@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
 import { check, validationResult, ValidationChain } from 'express-validator';
 import Post from '../models/Post';
-import User from '../models/User';
 import { PostControllerMethods, PostFields } from '../enums';
 require('dotenv').config();
 
 // Validator
 export const validate = (method: string): ValidationChain[] => {
   switch (method) {
-    case PostControllerMethods.addPost: {
+    case (PostControllerMethods.addPost, PostControllerMethods.updatePost): {
       return [check(PostFields.body, 'Missing post body').exists()];
     }
   }

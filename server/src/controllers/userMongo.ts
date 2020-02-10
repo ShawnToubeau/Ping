@@ -25,7 +25,7 @@ export const validate = (method: string): ValidationChain[] => {
     }
     case UserControllerMethods.updateUser: {
       return [
-        check(UserFields.name, 'Missing param').exists(),
+        check(UserFields.name, 'Missing name').exists(),
         check(UserFields.email, 'Invalid email').isEmail(),
         check(UserFields.password, 'Missing password').exists()
       ];
@@ -63,7 +63,7 @@ export const getUser = (req: Request, res: Response) => {
   });
 };
 
-// PUT user
+// POST user
 export const addUser = (req: Request, res: Response) => {
   const errors = validationResult(req);
 
@@ -108,7 +108,7 @@ export const deleteUser = (req: Request, res: Response) => {
   });
 };
 
-// POST user
+// PUT user
 export const updateUser = (req: Request, res: Response) => {
   const errors = validationResult(req);
 

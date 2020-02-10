@@ -10,6 +10,7 @@ require('dotenv').config();
 
 // // Route imports
 import userRoute from './routes/users';
+import postRoute from './routes/posts';
 import rootRoute from './routes/index';
 
 const app = express();
@@ -62,6 +63,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 
 // Routes
 app.use(userRoute);
+app.use(postRoute);
 app.use(rootRoute);
 
 const PORT = process.env.PORT || 4000;

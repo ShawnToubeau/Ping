@@ -1,3 +1,4 @@
 export enum PostControllerMethods {
-  addPost = 'addPost'
+  addPost = 'addPost',
+  updatePost = 'updatePost'
 }
