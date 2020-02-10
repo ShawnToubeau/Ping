@@ -7,7 +7,8 @@ require('dotenv').config();
 // Validator
 export const validate = (method: string): ValidationChain[] => {
   switch (method) {
-    case (PostControllerMethods.addPost, PostControllerMethods.updatePost): {
+    case PostControllerMethods.addPost:
+    case PostControllerMethods.updatePost: {
       return [check(PostFields.body, 'Missing post body').exists()];
     }
   }
@@ -49,7 +50,12 @@ export const addPost = (req: Request, res: Response) => {
 
   new Post({
     body
-  }).save();
+  })
+    .save()
+    .then(post => {
+      res.send('Added post');
+    })
+    .catch(err => res.send(err));
 };
 
 // DELETE post

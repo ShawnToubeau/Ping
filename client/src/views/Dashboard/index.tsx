@@ -2,6 +2,9 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+// Components
+import PostForm from './PostForm';
+
 // Actions
 import { logoutUser } from '../../actions/authActions';
 // Interfaces
@@ -24,9 +27,17 @@ class Dashboard extends React.Component<Props> {
     }
 
     return (
-      <div>
-        <h1>Welcome {user.name}</h1>
-        <button onClick={() => this.props.logoutUser()}>Logout</button>
+      <div className="Dashboard">
+        <div className="dashboard-header">
+          <h1>Welcome {user.name}</h1>
+          <button onClick={() => this.props.logoutUser()}>Logout</button>
+        </div>
+        <div className="post-content">
+          <div className="create-post">
+            <PostForm />
+          </div>
+          <div className="user-feed"></div>
+        </div>
       </div>
     );
   }
