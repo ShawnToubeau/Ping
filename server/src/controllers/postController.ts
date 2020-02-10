@@ -54,5 +54,29 @@ export const addPost = (req: Request, res: Response) => {
 };
 
 // DELETE post
+export const deletePost = (req: Request, res: Response) => {
+  Post.deleteOne({ _id: req.params.id }, (err: any) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send('Successfully deleted post');
+    }
+  });
+};
 
 // PUT post
+export const updatePost = (req: Request, res: Response) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  Post.findByIdAndUpdate(req.params.id, req.body, (err: any, post) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send('Successfully updated post');
+    }
+  });
+};
