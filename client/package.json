@@ -18,7 +18,7 @@
     "@types/react-router-redux": "^5.0.18",
     "@types/redux-devtools-extension": "^2.13.2",
     "@types/yup": "^0.26.27",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "formik": "^2.1.2",
     "install": "^0.13.0",
     "jwt-decode": "^2.2.0",
